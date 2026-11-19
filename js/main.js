@@ -1,3 +1,10 @@
+import {
+  THEME_KEY,
+  nextTheme,
+  resolveTheme,
+  themeGlyph,
+} from "./theme.js";
+
 const yearEl = document.getElementById("year");
 if (yearEl) {
   yearEl.textContent = String(new Date().getFullYear());
@@ -10,7 +17,6 @@ if (cta) {
   });
 }
 
-const THEME_KEY = "theme";
 const themeToggle = document.getElementById("theme-toggle");
 
 function getStoredTheme() {
@@ -33,17 +39,18 @@ function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
   if (themeToggle) {
     const isLight = theme === "light";
-    themeToggle.textContent = isLight ? "☾" : "☀";
+    themeToggle.textContent = themeGlyph(theme);
     themeToggle.setAttribute("aria-pressed", String(isLight));
   }
 }
 
 const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-applyTheme(getStoredTheme() ?? (prefersLight ? "light" : "dark"));
+applyTheme(resolveTheme(getStoredTheme(), prefersLight));
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+    const current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+    const next = nextTheme(current);
     applyTheme(next);
     storeTheme(next);
   });

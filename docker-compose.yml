@@ -1,0 +1,34 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: devops-lab-1:local
+    container_name: devops-lab-web
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  tests:
+    image: mcr.microsoft.com/playwright:v1.49.1-jammy
+    container_name: devops-lab-tests
+    working_dir: /work
+    volumes:
+      - .:/work
+    environment:
+      CI: "true"
+      BASE_URL: http://web:80
+    depends_on:
+      web:
+        condition: service_healthy
+    command: >
+      sh -c "npm ci &&
+             npm run test:unit &&
+             npx playwright test"
+    profiles:
+      - test

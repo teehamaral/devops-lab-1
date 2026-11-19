@@ -5,4 +5,13 @@
 .htmlvalidate.json
 .nojekyll
 Dockerfile
+docker-compose.yml
 README.md
+docs
+tests
+node_modules
+package.json
+package-lock.json
+playwright.config.js
+playwright-report
+test-results

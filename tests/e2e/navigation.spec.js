@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 
+// Example e2e test — add the remaining cases in tests/e2e/
 test("home page loads hero, about and contact sections", async ({ page }) => {
   await page.goto("/");
 

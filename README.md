@@ -17,7 +17,7 @@ The site is published with **GitHub Pages** via the workflow in `.github/workflo
 | `js/main.js` | Client-side interactions |
 | `js/theme.js` | Pure theme helpers (for unit tests) |
 | `tests/unit/` | Example Node unit test (remaining cases TBD) |
-| `tests/e2e/` | 3 Playwright functional tests |
+| `tests/e2e/` | Example Playwright e2e test (remaining cases TBD) |
 | `Dockerfile` | Container image serving the site with nginx |
 | `docker-compose.yml` | Runs the app and the test suite in isolated containers |
 | `.github/workflows/playwright.yml` | CI: unit example + Playwright e2e on push/PR |
@@ -43,9 +43,9 @@ Then visit `http://localhost:8080`.
 ```bash
 npm ci
 npx playwright install chromium   # first time only
-npm test                          # unit example + e2e
-npm run test:unit                 # unit tests only
-npm run test:e2e                  # 3 Playwright functional tests
+npm test                          # unit + e2e examples
+npm run test:unit                 # unit example only
+npm run test:e2e                  # e2e example only
 ```
 
 Without `BASE_URL`, Playwright starts `python3 -m http.server 8080` automatically.
@@ -55,9 +55,7 @@ Without `BASE_URL`, Playwright starts `python3 -m http.server 8080` automaticall
 | Type | File | What it covers |
 |------|------|----------------|
 | Unit (example) | `tests/unit/theme.test.js` | `nextTheme("light") → "dark"` — remaining unit tests TBD |
-| E2E | `tests/e2e/navigation.spec.js` | Title, hero, About/Contact navigation |
-| E2E | `tests/e2e/cta.spec.js` | CTA alert dialog |
-| E2E | `tests/e2e/theme.spec.js` | Theme toggle + persistence after reload |
+| E2E (example) | `tests/e2e/navigation.spec.js` | Title, hero, About/Contact navigation — remaining e2e TBD |
 
 ## Run with Docker
 
@@ -81,7 +79,7 @@ docker compose down
 docker compose --profile test run --rm tests
 ```
 
-This builds/starts `web` (nginx), waits until it is healthy, then runs the unit example and Playwright against `http://web:80` inside the Playwright container.
+This builds/starts `web` (nginx), waits until it is healthy, then runs the example tests against `http://web:80` inside the Playwright container.
 
 Equivalent one-liner with plain Docker:
 
@@ -94,7 +92,7 @@ docker run --rm -p 8080:80 devops-lab-1
 
 | Workflow | When | What |
 |----------|------|------|
-| `playwright.yml` | push/PR to `main` | `npm ci` → unit example → Playwright Chromium e2e |
+| `playwright.yml` | push/PR to `main` | `npm ci` → unit + Playwright examples |
 | `docker-build.yml` | PR to `main` | Build image + curl smoke checks |
 | `deploy-pages.yml` | push to `main` | Publish GitHub Pages |
 | `validate-html.yml` | PR to `main` | HTML validation |

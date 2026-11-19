@@ -42,7 +42,7 @@ jobs:
             sleep 1
           done
 
-      - name: Run Playwright e2e tests
+      - name: Run Playwright e2e tests (example)
         env:
           CI: true
           BASE_URL: http://127.0.0.1:8080

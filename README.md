@@ -18,6 +18,8 @@ The site is published with **GitHub Pages** via the workflow in `.github/workflo
 | `.nojekyll` | Disables Jekyll so static files publish as-is |
 | `.gitignore` | Ignores OS, editor, env, and build artifacts |
 | `.github/workflows/deploy-pages.yml` | GitHub Actions deploy to Pages |
+| `Dockerfile` | Container image serving the site with nginx |
+| `.github/workflows/docker-build.yml` | Builds and smoke-tests the Docker image on pull requests |
 
 ## Local preview
 
@@ -32,6 +34,15 @@ npx serve .
 ```
 
 Then visit `http://localhost:8080`.
+
+## Run with Docker
+
+```bash
+docker build -t devops-lab-1 .
+docker run --rm -p 8080:80 devops-lab-1
+```
+
+Then visit `http://localhost:8080`. The image is based on `nginx:1.27-alpine` and contains only `index.html`, `css/` and `js/`.
 
 ## GitHub Pages setup
 

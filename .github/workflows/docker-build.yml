@@ -1,0 +1,32 @@
+name: Docker build
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t devops-lab-1:ci .
+
+      - name: Run container and check the site
+        run: |
+          docker run -d --name site -p 8080:80 devops-lab-1:ci
+          for i in $(seq 1 15); do curl -fsS -o /dev/null http://localhost:8080/ && break; sleep 1; done
+          curl -fsS http://localhost:8080/ | grep -q "<title>DevOps Lab</title>"
+          curl -fsS -o /dev/null http://localhost:8080/css/styles.css
+          curl -fsS -o /dev/null http://localhost:8080/js/main.js
+          echo "Site is served by the container"
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker logs site || true
